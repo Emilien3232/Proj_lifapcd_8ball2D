@@ -29,7 +29,7 @@ void Jeu::INITJEU(){
     TDJ = TableDeJeu(DIM_TABLE_X , DIM_TABLE_Y , Vec2(0,0) , trousJeu);
 
     //on defini la boule blanche et la noir sur des positions precise qui serviront de repere pour les autres
-    BouleBlanche = boule(0 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(0,0) , Vec2(0,0));
+    BouleBlanche = boule(0 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(15,0) , Vec2(0,0));
     BouleNoire = boule(1 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - 2.f , DIM_TABLE_Y / 2), Vec2(0,0) ,Vec2(0,0));
     
     //on defini les boules jaunes
@@ -239,7 +239,7 @@ bool Jeu::checkCollision(const boule b1 , const boule b2) { //retourne true si i
 
 void Jeu::resultCollision(boule& b1, boule& b2) { //applique les nouvelles vitesses après une collision entre deux boules 
     
-    b1.vitesseBoule =  b1.vitesseBoule + Vec2(1,1);
+    b1.vitesseBoule =  b1.vitesseBoule + Vec2(1,1); //faut trouver la bonne formule ici, je ne trouve pas moi
     b2.vitesseBoule = b2.vitesseBoule + Vec2(1,1);
 }
 
