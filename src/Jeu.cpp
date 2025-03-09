@@ -137,7 +137,7 @@ bool Jeu::UPDATEJEU() {
     MAJpositionBoules(); 
 
     //gerer les collisions des boules entre elles et contre les bords
-    GestionCollisionsBords();
+    GestionCollisionsBords(); //possibles de faire que une seule fonction
     GestionCollisionsBoules();
  
     /*

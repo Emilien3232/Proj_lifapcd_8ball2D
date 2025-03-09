@@ -1,4 +1,4 @@
-all : bin/mon_projet
+all : bin/mon_projet bin/mainTestJeu
 
 bin/mainTestJeu : src/mainTestJeu.cpp 
 	g++  src/mainTestJeu.cpp src/Jeu.cpp -o bin/mainTestJeu
