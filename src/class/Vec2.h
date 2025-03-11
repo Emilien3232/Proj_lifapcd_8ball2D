@@ -13,10 +13,13 @@ struct Vec2 {
     Vec2 operator*(float lambda) const {return Vec2(x * lambda , y * lambda);}
     bool operator==(const Vec2 other) const {return x == other.x && y == other.y;}
     bool operator!=(const Vec2 other) const {return (x != other.x || y != other.y);}
+    
     float Dist(const Vec2 other) const {return sqrt(pow(other.x - x , 2) + pow(other.y - y , 2));} //retourne la distance avec un autre vec2
     
     float ProduitScalaire(const Vec2 other) const {return x * other.x + y * other.y;} // <Vec2 , other> utiles pour les collisions
+
     float Normal() const {return ProduitScalaire(Vec2(x,y));} // ||Vec2||² utiles pour les collisions
+
     Vec2 normalized() const {
         float length = sqrt(x * x + y * y);
         if (length > 0) {

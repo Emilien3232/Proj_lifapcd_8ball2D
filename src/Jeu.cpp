@@ -29,34 +29,33 @@ void Jeu::INITJEU(){
     TDJ = TableDeJeu(DIM_TABLE_X , DIM_TABLE_Y , Vec2(0,0) , trousJeu);
 
     //on defini la boule blanche et la noir sur des positions precise qui serviront de repere pour les autres
-    BouleBlanche = boule(0 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(15,0) , Vec2(0,0));
-    BouleNoire = boule(1 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - 2.f , DIM_TABLE_Y / 2), Vec2(0,0) ,Vec2(0,0));
+    BouleBlanche = boule(0 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(15,0) , 1.5f);
+    BouleNoire = boule(1 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - 2.f , DIM_TABLE_Y / 2), Vec2(0,0) ,0);
     
     //on defini les boules jaunes
     boule* bjaunes = new boule [7];
-    bjaunes[0] = boule(1 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 , DIM_TABLE_Y / 2), Vec2(0,0) ,Vec2(0,0)); //en tete du triangle (les auteres boules sont placés en fonction de celle ci)
-    bjaunes[1] = boule(2 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE - ECART , DIM_TABLE_Y / 2 + DIAM_BOULE + ECART), Vec2(0,0) , Vec2(0,0)); 
-    bjaunes[2] = boule(3 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE - ECART , DIM_TABLE_Y / 2 - DIAM_BOULE - ECART), Vec2(0,0) , Vec2(0,0));
-    bjaunes[3] = boule(4 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - DOUBLE_ECART , DIM_TABLE_Y / 2 - DIAM_BOULE - ECART), Vec2(0,0) ,Vec2(0,0)); 
-    bjaunes[4] = boule(5 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - DOUBLE_ECART , DIM_TABLE_Y / 2 + DIAM_BOULE + ECART), Vec2(0,0) ,Vec2(0,0));
-    bjaunes[5] = boule(6 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 + DIAM_BOULE + ECART), Vec2(0,0) ,Vec2(0,0)); 
-    bjaunes[6] = boule(7 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 + DIAM_BOULE * 2 + DOUBLE_ECART), Vec2(0,0) ,Vec2(0,0));
+    bjaunes[0] = boule(1 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 , DIM_TABLE_Y / 2), Vec2(0,0) ,0); //en tete du triangle (les auteres boules sont placés en fonction de celle ci)
+    bjaunes[1] = boule(2 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE - ECART , DIM_TABLE_Y / 2 + DIAM_BOULE / 2 + ECART), Vec2(0,0) , 0); 
+    bjaunes[2] = boule(3 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE - ECART , DIM_TABLE_Y / 2 - DIAM_BOULE / 2 - ECART), Vec2(0,0) , 0);
+    bjaunes[3] = boule(4 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - DOUBLE_ECART , DIM_TABLE_Y / 2 - DIAM_BOULE - ECART), Vec2(0,0) ,0); 
+    bjaunes[4] = boule(5 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - DOUBLE_ECART , DIM_TABLE_Y / 2 + DIAM_BOULE + ECART), Vec2(0,0) ,0);
+    bjaunes[5] = boule(6 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 - DIAM_BOULE * 2  + DIAM_BOULE / 2 - DOUBLE_ECART), Vec2(0,0) ,0);
+    bjaunes[6] = boule(7 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 + DIAM_BOULE * 2 - DIAM_BOULE / 2 + DOUBLE_ECART), Vec2(0,0) ,0);
     BJ = boulesJaunes(bjaunes , 7);
 
     //et finalement les boules rouges 
     boule* brouges = new boule [7];
-    brouges[0] = boule(13 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART , DIM_TABLE_Y / 2) , Vec2(0,0) , Vec2(0,0));
+    brouges[0] = boule(13 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART , DIM_TABLE_Y / 2) , Vec2(0,0) , 0);
     for(unsigned int i = 1 ; i <= 2 ; i++){
-        brouges[i] = boule(13+i , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART , DIM_TABLE_Y / 2 + i * (ECART + DIAM_BOULE)) , Vec2(0,0) , Vec2(0,0));
+        brouges[i] = boule(13+i , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART , DIM_TABLE_Y / 2 + i * (ECART + DIAM_BOULE)) , Vec2(0,0) , 0);
     }
     for(unsigned int i = 1 ; i <= 2 ; i++){
-        brouges[2+i] = boule(13-i , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART , DIM_TABLE_Y / 2 - i * (ECART + DIAM_BOULE)) , Vec2(0,0) , Vec2(0,0));
+        brouges[2+i] = boule(13-i , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART , DIM_TABLE_Y / 2 - i * (ECART + DIAM_BOULE)) , Vec2(0,0) , 0);
     }
-    brouges[5] = boule(10 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 - DIAM_BOULE * 2 - DOUBLE_ECART), Vec2(0,0) ,Vec2(0,0));
-    brouges[6] = boule(9 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 - DIAM_BOULE - ECART), Vec2(0,0) ,Vec2(0,0));
+    brouges[5] = boule(10 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 + DIAM_BOULE / 2+ ECART), Vec2(0,0) ,0); 
+    brouges[6] = boule(9 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 - DIAM_BOULE  / 2 - ECART), Vec2(0,0) ,0);
     BR = boulesRouges(brouges , 7);
 }
-
 
 void Jeu::test_INITJEU() { //je l'ai fait avec deepseek lui
     // Appel de la fonction INITJEU() pour initialiser le jeu
@@ -167,22 +166,22 @@ bool Jeu::UPDATEJEU() {
 }
 
 void Jeu::MAJpositionBoules() { //pour les frottements revenir ici et appliquer un scalaire à la vitesse des boules , indépendament de l'actu de position je pense
-    BouleBlanche.positionBoule = BouleBlanche.positionBoule + BouleBlanche.vitesseBoule;
+    BouleBlanche.positionBoule = BouleBlanche.positionBoule + (BouleBlanche.directionBoule * BouleBlanche.vitesseBoule);
     BouleBlanche.vitesseBoule = BouleBlanche.vitesseBoule * SCAL_F;
 
 
-    BouleNoire.positionBoule = BouleNoire.positionBoule + BouleNoire.vitesseBoule;
+    BouleNoire.positionBoule = BouleNoire.positionBoule +(BouleNoire.directionBoule * BouleNoire.vitesseBoule);
     BouleNoire.vitesseBoule = BouleNoire.vitesseBoule * SCAL_F;
 
     boule* bjaunes = BJ.getBjaunes();
     for (int i = 0; i < BJ.getnbBJ(); i++) {
-        bjaunes[i].positionBoule = bjaunes[i].positionBoule + bjaunes[i].vitesseBoule;
+        bjaunes[i].positionBoule = bjaunes[i].positionBoule + (bjaunes[i].directionBoule * bjaunes[i].vitesseBoule);
         bjaunes[i].vitesseBoule = bjaunes[i].vitesseBoule * SCAL_F;
     }
   
     boule* brouges = BR.getBrouges();
     for (int i = 0; i < BR.getnbBR(); i++) {
-        brouges[i].positionBoule = brouges[i].positionBoule + brouges[i].vitesseBoule;
+        brouges[i].positionBoule = brouges[i].positionBoule +(brouges[i].directionBoule * brouges[i].vitesseBoule);
         brouges[i].vitesseBoule = brouges[i].vitesseBoule * SCAL_F;
     }
 }
@@ -215,7 +214,8 @@ void Jeu::bouletombéBLCH(boule B) {
         if(B.positionBoule.Dist(TDJ.gettrous()[i].posTrou) < DIAM_BOULE) { //si la boule B est dans un trou 
             std::cout<<"la boule blanche est tombée !!"<<std::endl;
             B.positionBoule = Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 4); //si la boule blanche je la remet à sa position de départ
-            B.vitesseBoule = Vec2(0,0);
+            B.vitesseBoule = 0;
+            B.directionBoule = Vec2(0,0);
         }
     }
 }
@@ -233,14 +233,22 @@ bool Jeu::bouletombéNR(boule B) {
 
 bool Jeu::checkCollision(const boule b1 , const boule b2) { //retourne true si il y a collision
     float distance = b1.positionBoule.Dist(b2.positionBoule);
-    float sommeRad = b1.diam + b2.diam -1000;
-    return distance < sommeRad;
+    float sommeRad = b1.diam + b2.diam ;
+    return distance < sommeRad / 2;
 }
 
 void Jeu::resultCollision(boule& b1, boule& b2) { //applique les nouvelles vitesses après une collision entre deux boules 
-    
-    b1.vitesseBoule =  b1.vitesseBoule + Vec2(1,1); //faut trouver la bonne formule ici, je ne trouve pas moi
-    b2.vitesseBoule = b2.vitesseBoule + Vec2(1,1);
+
+    Vec2 Norm = (b2.positionBoule-b1.positionBoule).normalized();
+    float PSvelo = Norm.ProduitScalaire(b1.directionBoule - b2.directionBoule); 
+    float imp = 2.f * PSvelo / (b1.masse + b2.masse);
+
+    if (PSvelo >= 0) { //si les boule s'eloignent déja on fait pas de changement
+        b1.directionBoule =  (b1.directionBoule - Norm * (imp * b2.masse)) ; 
+        b1.vitesseBoule = 1.1f;
+        b2.directionBoule = (b2.directionBoule - Norm * (imp * b1.masse)) ;
+        b2.vitesseBoule = 1.1f;
+    }
 }
 
 void Jeu::GestionCollisionsBoules() {
@@ -296,28 +304,28 @@ void Jeu::GestionCollisionsBoules() {
 void Jeu::GestionCollisionsBords() {
     // Gestion des collisions pour la boule blanche
     if (BouleBlanche.positionBoule.x - BouleBlanche.diam / 2 < 0 || BouleBlanche.positionBoule.x + BouleBlanche.diam / 2 > DIM_TABLE_X) {
-        BouleBlanche.vitesseBoule.x *= -1;
+        BouleBlanche.directionBoule.x *= -1;
     }
     if (BouleBlanche.positionBoule.y - BouleBlanche.diam / 2 < 0 || BouleBlanche.positionBoule.y + BouleBlanche.diam / 2 > DIM_TABLE_Y) {
-        BouleBlanche.vitesseBoule.y *= -1; 
+        BouleBlanche.directionBoule.y *= -1; 
     }
 
     // Gestion des collisions pour la boule noire
     if (BouleNoire.positionBoule.x - BouleNoire.diam / 2 < 0 || BouleNoire.positionBoule.x + BouleNoire.diam / 2 > DIM_TABLE_X) {
-        BouleNoire.vitesseBoule.x *= -1;
+        BouleNoire.directionBoule.x *= -1;
     }
     if (BouleNoire.positionBoule.y - BouleNoire.diam / 2 < 0 || BouleNoire.positionBoule.y + BouleNoire.diam / 2 > DIM_TABLE_Y) {
-        BouleNoire.vitesseBoule.y *= -1; 
+        BouleNoire.directionBoule.y *= -1; 
     }
 
     // Gestion des collisions pour les boules jaunes
     boule* bjaunes = BJ.getBjaunes();
     for (int i = 0; i < BJ.getnbBJ(); i++) {
         if (bjaunes[i].positionBoule.x - bjaunes[i].diam / 2 < 0 || bjaunes[i].positionBoule.x + bjaunes[i].diam / 2 > DIM_TABLE_X) {
-            bjaunes[i].vitesseBoule.x *= -1;
+            bjaunes[i].directionBoule.x *= -1;
         }
         if (bjaunes[i].positionBoule.y - bjaunes[i].diam / 2 < 0 || bjaunes[i].positionBoule.y + bjaunes[i].diam / 2 > DIM_TABLE_Y) {
-            bjaunes[i].vitesseBoule.y *= -1; 
+            bjaunes[i].directionBoule.y *= -1; 
         }
     }
 
@@ -325,10 +333,10 @@ void Jeu::GestionCollisionsBords() {
     boule* brouges = BR.getBrouges();
     for (int i = 0; i < BR.getnbBR(); i++) {
         if (brouges[i].positionBoule.x - brouges[i].diam / 2 < 0 || brouges[i].positionBoule.x + brouges[i].diam / 2 > DIM_TABLE_X) {
-            brouges[i].vitesseBoule.x *= -1; 
+            brouges[i].directionBoule.x *= -1; 
         }
         if (brouges[i].positionBoule.y - brouges[i].diam / 2 < 0 || brouges[i].positionBoule.y + brouges[i].diam / 2 > DIM_TABLE_Y) {
-            brouges[i].vitesseBoule.y *= -1; 
+            brouges[i].directionBoule.y *= -1; 
         }
     }
 }
