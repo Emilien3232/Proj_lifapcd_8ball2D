@@ -11,7 +11,7 @@ const float ECART = 1.f; //petite distance entre chaque boules à l'initialisati
 const float DOUBLE_ECART = 2.f;
 const float TRIPLE_ECART = 3.f;
 const float QUAD_ECART = 4.f;
-const float SCAL_F = 0.99f; //constante de frottement
+const float SCAL_F = 0.9f; //constante de frottement
 const float SEUIL_VITESSE = 0.0001f; 
 
 void Jeu::INITJEU(){
@@ -29,7 +29,8 @@ void Jeu::INITJEU(){
     TDJ = TableDeJeu(DIM_TABLE_X , DIM_TABLE_Y , Vec2(0,0) , trousJeu);
 
     //on defini la boule blanche et la noir sur des positions precise qui serviront de repere pour les autres
-    BouleBlanche = boule(0 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(15,0) , 1.5f);
+    BouleBlanche = boule(0 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(1,0) , 1.5f); //le vecteur de direction ne doit pas impacté la force de frappe d'un boule mais jjuste sa direction (regler ce probleme)
+
     BouleNoire = boule(1 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - 2.f , DIM_TABLE_Y / 2), Vec2(0,0) ,0);
     
     //on defini les boules jaunes
@@ -146,20 +147,16 @@ bool Jeu::UPDATEJEU() {
     */
 
     //verifie les situatons des boules (tombés ou pas), si cette situation implique la fin du jeu => return false
-    if (BJ.getnbBJ() == 0 ) { return false ;}
-    else {
-        for(int i=0;i<BJ.getnbBJ();i++){
-            bouletombé(BJ);
-        }
+    if(BJ.getnbBJ() != 0 ) {
+            bouletombé(BJ); 
     }
-    if (BR.getnbBR() == 0) {return false ;}
-    else {
-        for(int i=0;i<BR.getnbBR();i++){
+    else{return false;}
+    if(BR.getnbBR() != 0){
             bouletombé(BR);
-        }
     }
+    else{return false;}
     bouletombéBLCH(BouleBlanche);
-    if(bouletombéNR(BouleNoire)) {return false;}
+    //if(bouletombéNR(BouleNoire)) {return false;}   //marche mais je le met en commentaire pour pour pouvoir regarder le programme sans que sa s'arrete trop rapidement
 
     return true;
 
@@ -204,7 +201,7 @@ void Jeu::bouletombé(boulesRouges B) {
             B.setnbBR(B.getnbBR() - 1);
             std::cout<<"la boule "<<B.getBrouges()[i].IDnombre<<" est tombée"<<std::endl;
             B.getBrouges()[i].positionBoule = Vec2(0,0); //faire disparaitre la boule (je la met dans un coin )
-            B.getBrouges()[i].diam = 0.f;  //et mets son rayon si petit qu'elle ne s'affcihcera pas (pas sur)
+            B.getBrouges()[i].diam = 0.f;  //et mets son rayon si petit qu'elle ne s'affcihcera pas 
         }
     }
 }
@@ -244,10 +241,10 @@ void Jeu::resultCollision(boule& b1, boule& b2) { //applique les nouvelles vites
     float imp = 2.f * PSvelo / (b1.masse + b2.masse);
 
     if (PSvelo >= 0) { //si les boule s'eloignent déja on fait pas de changement
-        b1.directionBoule =  (b1.directionBoule - Norm * (imp * b2.masse)) ; 
-        b1.vitesseBoule = 1.1f;
-        b2.directionBoule = (b2.directionBoule - Norm * (imp * b1.masse)) ;
-        b2.vitesseBoule = 1.1f;
+        b1.directionBoule =  (b1.directionBoule + Norm * (imp * b2.masse)) ; 
+        b1.vitesseBoule = 0.5f;
+        b2.directionBoule = (b2.directionBoule + Norm * (imp * b1.masse)) ;
+        b2.vitesseBoule = 0.5f;
     }
 }
 
@@ -260,6 +257,13 @@ void Jeu::GestionCollisionsBoules() {
         }
     }
 
+    // Collisions entre la boule noire et les boules jauness
+    for (int i = 0; i < BJ.getnbBJ(); i++) {
+        if (checkCollision(BouleNoire, BJ.getBjaunes()[i])) {
+            resultCollision(BouleNoire, BJ.getBjaunes()[i]);
+        }
+    }
+
     // Collisions entre la boule blanche et les boules rouges
     boule* brouges = BR.getBrouges();
     for (int i = 0; i < BR.getnbBR(); i++) {
@@ -267,6 +271,14 @@ void Jeu::GestionCollisionsBoules() {
             resultCollision(BouleBlanche, brouges[i]);
         }
     }
+    
+    // Collisions entre la boule noire et les boules rouges
+    for (int i = 0; i < BR.getnbBR(); i++) {
+        if (checkCollision(BouleNoire, brouges[i])) {
+            resultCollision(BouleNoire, brouges[i]);
+        }
+    }
+
 
     // Collisions entre la boule blanche et la boule noire
     if (checkCollision(BouleBlanche, BouleNoire)) {
