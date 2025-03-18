@@ -18,7 +18,7 @@ class Jeu {
         Jeu(TableDeJeu nTDJ , boulesJaunes nBJ , boulesRouges nBR , boule nBouleBlanche , boule nBouleNoire) :
             TDJ(nTDJ) , BJ(nBJ) , BR(nBR) , BouleBlanche(nBouleBlanche) , BouleNoire(nBouleNoire) {}
 
-        TableDeJeu getTDJ() {return TDJ;}
+        TableDeJeu& getTDJ() {return TDJ;}
         boulesJaunes getBJ() {return BJ;}
         boulesRouges getBR() {return BR;}
         boule getBouleBlanche() {return BouleBlanche;}

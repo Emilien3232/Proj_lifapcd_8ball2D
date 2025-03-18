@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "class/Jeu.h"
+#include "class/trou.h"
 
 const int SCREEN_WIDTH = 1000;  // Largeur de la fenêtre
 const int SCREEN_HEIGHT = 546;  // Hauteur de la fenêtre
@@ -20,6 +21,29 @@ void dessinerBoule(SDL_Renderer* renderer, const boule& b, SDL_Color couleur) {
             int dy = b.diam / 2 - h;  // Distance verticale par rapport au centre
             if ((dx * dx + dy * dy) <= ((b.diam / 2) * (b.diam / 2))) {
                 SDL_RenderDrawPoint(renderer, b.positionBoule.x + dx, b.positionBoule.y + dy);
+            }
+        }
+    }
+}
+
+void dessinerTrous(SDL_Renderer* renderer, TableDeJeu& table) {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Noir
+
+    trou* trous = table.gettrous(); // Récupère le tableau des trous
+
+    for (int i = 0; i < 6; i++) {
+        int x = (int)trous[i].posTrou.x;
+        int y = (int)trous[i].posTrou.y;
+        int diam = (int)(trous[i].rayonTrou * 2);
+
+        // Dessiner un trou sous forme de cercle
+        for (int w = 0; w < diam; w++) {
+            for (int h = 0; h < diam; h++) {
+                int dx = w - diam / 2;
+                int dy = h - diam / 2;
+                if ((dx * dx + dy * dy) <= (diam / 2) * (diam / 2)) {
+                    SDL_RenderDrawPoint(renderer, x + dx, y + dy);
+                }
             }
         }
     }
@@ -83,6 +107,7 @@ int main(int argc, char* argv[]) {
 
         // Dessiner les éléments du jeu (à implémenter)
         dessinerTable(renderer);
+        dessinerTrous(renderer, jeu.getTDJ());
 
         // Dessiner les boules
         SDL_Color couleurJaune = {255, 255, 0, 255};  // Jaune
