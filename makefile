@@ -1,16 +1,13 @@
-all : bin/mon_projet bin/mainTestJeu
+all : projet
 
-bin/mainTestJeu : src/mainTestJeu.cpp 
+test : src/mainTestJeu.cpp 
 	g++  src/mainTestJeu.cpp src/Jeu.cpp -o bin/mainTestJeu
-
-bin/mon_projet : src/main.cpp
-	g++ -o bin/mon_projet src/main.cpp src/Jeu.cpp -lSDL2 -lSDL2main
-
-projet : 
-	./bin/mon_projet
-
-testJeu :
 	./bin/mainTestJeu
+
+projet : src/main.cpp
+	g++ src/main.cpp src/Jeu.cpp -o bin/mon_projet -lSDL2 -lSDL2main
+	./bin/mon_projet
+	
 
 clean : 
 	rm -f bin/mainTestJeu bin/mon_projet
