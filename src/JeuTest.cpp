@@ -11,7 +11,7 @@ const float ECART = 1.f; //petite distance entre chaque boules à l'initialisati
 const float DOUBLE_ECART = 2.f;
 const float TRIPLE_ECART = 3.f;
 const float QUAD_ECART = 4.f;
-const float SCAL_F = 0.95f; //constante de frottement
+const float SCAL_F = 0.99f; //constante de frottement
 const float SEUIL_VITESSE = 0.0001f; 
 const float PB = 0.001f;
 
@@ -29,106 +29,17 @@ void Jeu::INITJEU(){
     trousJeu[5].posTrou = Vec2(DIM_TABLE_X , DIM_TABLE_Y); //en bas à droite
     TDJ = TableDeJeu(DIM_TABLE_X , DIM_TABLE_Y , Vec2(0,0) , trousJeu);
 
+    Vec2 direction = (BouleNoire.positionBoule - BouleBlanche.positionBoule).normalized();
+
     //on defini la boule blanche et la noir sur des positions precise qui serviront de repere pour les autres
-    BouleBlanche = boule(0 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(-1,0) , 35.f); //le vecteur de direction ne doit pas impacté la force de frappe d'un boule mais jjuste sa direction (regler ce probleme)
+    BouleBlanche = boule(0 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(-1 , 0) , 10.f); //le vecteur de direction ne doit pas impacté la force de frappe d'un boule mais jjuste sa direction (regler ce probleme)
 
-    BouleNoire = boule(1 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - 2.f , DIM_TABLE_Y / 2), Vec2(0,0) ,0);
+    BouleNoire = boule(1 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X /4 , DIM_TABLE_Y / 2), Vec2(0,0) , 0);
     
-    //on defini les boules jaunes
-    boule* bjaunes = new boule [7];
-    bjaunes[0] = boule(1 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 , DIM_TABLE_Y / 2), Vec2(0,0) ,0); //en tete du triangle (les auteres boules sont placés en fonction de celle ci)
-    bjaunes[1] = boule(2 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE - ECART , DIM_TABLE_Y / 2 + DIAM_BOULE / 2 + ECART), Vec2(0,0) , 0); 
-    bjaunes[2] = boule(3 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE - ECART , DIM_TABLE_Y / 2 - DIAM_BOULE / 2 - ECART), Vec2(0,0) , 0);
-    bjaunes[3] = boule(4 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - DOUBLE_ECART , DIM_TABLE_Y / 2 - DIAM_BOULE - ECART), Vec2(0,0) ,0); 
-    bjaunes[4] = boule(5 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - DOUBLE_ECART , DIM_TABLE_Y / 2 + DIAM_BOULE + ECART), Vec2(0,0) ,0);
-    bjaunes[5] = boule(6 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 - DIAM_BOULE * 2  + DIAM_BOULE / 2 - DOUBLE_ECART), Vec2(0,0) ,0);
-    bjaunes[6] = boule(7 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 + DIAM_BOULE * 2 - DIAM_BOULE / 2 + DOUBLE_ECART), Vec2(0,0) ,0);
-    BJ = boulesJaunes(bjaunes , 7);
 
-    //et finalement les boules rouges 
-    boule* brouges = new boule[7];
-    brouges[0] = boule(9, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2), Vec2(0, 0), 0);
-    brouges[1] = boule(10, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2 + (ECART + DIAM_BOULE)), Vec2(0, 0), 0);
-    brouges[2] = boule(11, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2 + 2 * (ECART + DIAM_BOULE)), Vec2(0, 0), 0);
-    brouges[3] = boule(12, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2 - (ECART + DIAM_BOULE)), Vec2(0, 0), 0);
-    brouges[4] = boule(13, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2 - 2 * (ECART + DIAM_BOULE)), Vec2(0, 0), 0);
-    brouges[5] = boule(14, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART, DIM_TABLE_Y / 2 + DIAM_BOULE / 2 + ECART), Vec2(0, 0), 0);
-    brouges[6] = boule(15, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART, DIM_TABLE_Y / 2 - DIAM_BOULE / 2 - ECART), Vec2(0, 0), 0);
-    BR = boulesRouges(brouges, 7);
 }
 
-void Jeu::test_INITJEU() {
-    // Appel de la fonction INITJEU() pour initialiser le jeu
-    INITJEU();
 
-    // Récupération des objets initialisés
-    TableDeJeu table = TDJ;
-    boulesJaunes boulesJaunes = BJ;
-    boulesRouges boulesRouges = BR;
-    boule bouleBlanche = BouleBlanche;
-    boule bouleNoire = BouleNoire;
-
-    // Test 1 : Vérification des dimensions de la table de jeu
-    assert(table.getDimTableX() == 1000);
-    assert(table.getDimTableY() == 546);
-    std::cout << "Test 1 : Dimensions de la table de jeu OK" << std::endl;
-
-    // Test 2 : Vérification des positions des trous
-    trou* trous = table.gettrous();
-    assert(trous[0].posTrou == Vec2(0, 0));
-    assert(trous[1].posTrou == Vec2(500, 0));
-    assert(trous[2].posTrou == Vec2(1000, 0));
-    assert(trous[3].posTrou == Vec2(0, 546));
-    assert(trous[4].posTrou == Vec2(500, 546));
-    assert(trous[5].posTrou == Vec2(1000, 546));
-    std::cout << "Test 2 : Positions des trous OK" << std::endl;
-
-    // Test 3 : Vérification des rayons des trous avec une tolérance
-    for (int i = 0; i < 6; i++) {
-        assert(trous[i].rayonTrou == 20.5 * 2);
-    }
-    std::cout << "Test 3 : Rayons des trous OK" << std::endl;
-
-    // Test 4 : Vérification de la position de la boule blanche
-    assert(bouleBlanche.positionBoule == Vec2(750, 273));
-    std::cout << "Test 4 : Position de la boule blanche OK" << std::endl;
-
-    // Test 5 : Vérification de la position de la boule noire
-    assert(bouleNoire.positionBoule == Vec2(250 - 20.5 * 2 - 2, 273));
-    std::cout << "Test 5 : Position de la boule noire OK" << std::endl;
-
-    // Test 6 : Vérification du nombre de boules jaunes
-    assert(boulesJaunes.getnbBJ() == 7);
-    std::cout << "Test 6 : Nombre de boules jaunes OK" << std::endl;
-
-    // Test 7 : Vérification du nombre de boules rouges
-    assert(boulesRouges.getnbBR() == 7);
-    std::cout << "Test 7 : Nombre de boules rouges OK" << std::endl;
-
-    // Test 8 : Vérification des positions des boules jaunes
-    boule* bjaunes = boulesJaunes.getBjaunes();
-    assert(bjaunes[0].positionBoule == Vec2(250, 273));
-    assert(bjaunes[1].positionBoule == Vec2(250 - 20.5 - 1, 273 + 20.5 / 2 + 1));
-    assert(bjaunes[2].positionBoule == Vec2(250 - 20.5 - 1, 273 - 20.5 / 2 - 1));
-    assert(bjaunes[3].positionBoule == Vec2(250 - 20.5 * 2 - 2, 273 - 20.5 - 1));
-    assert(bjaunes[4].positionBoule == Vec2(250 - 20.5 * 2 - 2, 273 + 20.5 + 1));
-    assert(bjaunes[5].positionBoule == Vec2(250 - 20.5 * 3 - 3, 273 - 20.5 * 2 + 20.5 / 2 - 2));
-    assert(bjaunes[6].positionBoule == Vec2(250 - 20.5 * 3 - 3, 273 + 20.5 * 2 - 20.5 / 2 + 2));
-    std::cout << "Test 8 : Positions des boules jaunes OK" << std::endl;
-
-    // Test 9 : Vérification des positions des boules rouges
-    boule* brouges = boulesRouges.getBrouges();
-    assert(brouges[0].positionBoule == Vec2(250 - 4 * 20.5 - 4, 273));
-    assert(brouges[1].positionBoule == Vec2(250 - 4 * 20.5 - 4, 273 + 1 + 20.5));
-    assert(brouges[2].positionBoule == Vec2(250 - 4 * 20.5 - 4, 273 + 2 * (1 + 20.5)));
-    assert(brouges[3].positionBoule == Vec2(250 - 4 * 20.5 - 4, 273 - 1 * (1 + 20.5)));
-    assert(brouges[4].positionBoule == Vec2(250 - 4 * 20.5 - 4, 273 - 2 * (1 + 20.5)));
-    assert(brouges[5].positionBoule == Vec2(250 - 20.5 * 3 - 3, 273 + 20.5 / 2 + 1));
-    assert(brouges[6].positionBoule == Vec2(250 - 20.5 * 3 - 3, 273 - 20.5 / 2 - 1));
-    std::cout << "Test 9 : Positions des boules rouges OK" << std::endl;
-
-    std::cout << "Tous les tests de régression ont réussi !" << std::endl;
-}
 
 bool Jeu::UPDATEJEU() {
     
@@ -146,15 +57,7 @@ bool Jeu::UPDATEJEU() {
     */
 
     //verifie les situatons des boules (tombés ou pas), si cette situation implique la fin du jeu => return false
-    if(BJ.getnbBJ() != 0 ) {
-            bouletombée(BJ); 
-    }
-    else{return false;}
-
-    if(BR.getnbBR() != 0){
-            bouletombée(BR);
-    }
-    else{return false;}
+ 
 
     bouletombéeBLCH(BouleBlanche);
 
@@ -168,21 +71,8 @@ void Jeu::MAJpositionBoules() {
     BouleBlanche.positionBoule = BouleBlanche.positionBoule + (BouleBlanche.directionBoule * BouleBlanche.vitesseBoule);
     BouleBlanche.vitesseBoule = BouleBlanche.vitesseBoule * SCAL_F;
 
-
     BouleNoire.positionBoule = BouleNoire.positionBoule +(BouleNoire.directionBoule * BouleNoire.vitesseBoule);
     BouleNoire.vitesseBoule = BouleNoire.vitesseBoule * SCAL_F;
-
-    boule* bjaunes = BJ.getBjaunes();
-    for (int i = 0; i < BJ.getnbBJ(); i++) {
-        bjaunes[i].positionBoule = bjaunes[i].positionBoule + (bjaunes[i].directionBoule * bjaunes[i].vitesseBoule);
-        bjaunes[i].vitesseBoule = bjaunes[i].vitesseBoule * SCAL_F;
-    }
-  
-    boule* brouges = BR.getBrouges();
-    for (int i = 0; i < BR.getnbBR(); i++) {
-        brouges[i].positionBoule = brouges[i].positionBoule +(brouges[i].directionBoule * brouges[i].vitesseBoule);
-        brouges[i].vitesseBoule = brouges[i].vitesseBoule * SCAL_F;
-    }
 }
 
 void Jeu::bouletombée(boulesJaunes &B) {
