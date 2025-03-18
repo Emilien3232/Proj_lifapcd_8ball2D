@@ -11,8 +11,9 @@ const float ECART = 1.f; //petite distance entre chaque boules à l'initialisati
 const float DOUBLE_ECART = 2.f;
 const float TRIPLE_ECART = 3.f;
 const float QUAD_ECART = 4.f;
-const float SCAL_F = 0.99f; //constante de frottement
+const float SCAL_F = 0.95f; //constante de frottement
 const float SEUIL_VITESSE = 0.0001f; 
+const float PB = 0.001f;
 
 void Jeu::INITJEU(){
     //on cherche à definir "TableDeJeu" donc premierement on initialise les trous avec un rayon de 2 * DIAM_BOULE et leurs position
@@ -29,30 +30,30 @@ void Jeu::INITJEU(){
     TDJ = TableDeJeu(DIM_TABLE_X , DIM_TABLE_Y , Vec2(0,0) , trousJeu);
 
     //on defini la boule blanche et la noir sur des positions precise qui serviront de repere pour les autres
-    BouleBlanche = boule(0 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(-1,0) , 8.f); //le vecteur de direction ne doit pas impacté la force de frappe d'un boule mais jjuste sa direction (regler ce probleme)
+    BouleBlanche = boule(0 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(-1,0) , 27.f); //le vecteur de direction ne doit pas impacté la force de frappe d'un boule mais jjuste sa direction (regler ce probleme)
 
-    BouleNoire = boule(1 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - 2.f , DIM_TABLE_Y / 2), Vec2(0,0) ,0);
+    BouleNoire = boule(1 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - 2.f , DIM_TABLE_Y / 2), Vec2(0,0) ,0);
     
     //on defini les boules jaunes
     boule* bjaunes = new boule [7];
-    bjaunes[0] = boule(1 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 , DIM_TABLE_Y / 2), Vec2(0,0) ,0); //en tete du triangle (les auteres boules sont placés en fonction de celle ci)
-    bjaunes[1] = boule(2 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE - ECART , DIM_TABLE_Y / 2 + DIAM_BOULE / 2 + ECART), Vec2(0,0) , 0); 
-    bjaunes[2] = boule(3 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE - ECART , DIM_TABLE_Y / 2 - DIAM_BOULE / 2 - ECART), Vec2(0,0) , 0);
-    bjaunes[3] = boule(4 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - DOUBLE_ECART , DIM_TABLE_Y / 2 - DIAM_BOULE - ECART), Vec2(0,0) ,0); 
-    bjaunes[4] = boule(5 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - DOUBLE_ECART , DIM_TABLE_Y / 2 + DIAM_BOULE + ECART), Vec2(0,0) ,0);
-    bjaunes[5] = boule(6 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 - DIAM_BOULE * 2  + DIAM_BOULE / 2 - DOUBLE_ECART), Vec2(0,0) ,0);
-    bjaunes[6] = boule(7 , DIAM_BOULE , 1.f , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 + DIAM_BOULE * 2 - DIAM_BOULE / 2 + DOUBLE_ECART), Vec2(0,0) ,0);
+    bjaunes[0] = boule(1 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 , DIM_TABLE_Y / 2), Vec2(0,0) ,0); //en tete du triangle (les auteres boules sont placés en fonction de celle ci)
+    bjaunes[1] = boule(2 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE - ECART , DIM_TABLE_Y / 2 + DIAM_BOULE / 2 + ECART), Vec2(0,0) , 0); 
+    bjaunes[2] = boule(3 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE - ECART , DIM_TABLE_Y / 2 - DIAM_BOULE / 2 - ECART), Vec2(0,0) , 0);
+    bjaunes[3] = boule(4 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - DOUBLE_ECART , DIM_TABLE_Y / 2 - DIAM_BOULE - ECART), Vec2(0,0) ,0); 
+    bjaunes[4] = boule(5 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - DOUBLE_ECART , DIM_TABLE_Y / 2 + DIAM_BOULE + ECART), Vec2(0,0) ,0);
+    bjaunes[5] = boule(6 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 - DIAM_BOULE * 2  + DIAM_BOULE / 2 - DOUBLE_ECART), Vec2(0,0) ,0);
+    bjaunes[6] = boule(7 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART , DIM_TABLE_Y / 2 + DIAM_BOULE * 2 - DIAM_BOULE / 2 + DOUBLE_ECART), Vec2(0,0) ,0);
     BJ = boulesJaunes(bjaunes , 7);
 
     //et finalement les boules rouges 
     boule* brouges = new boule[7];
-    brouges[0] = boule(9, DIAM_BOULE, 1.f, Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2), Vec2(0, 0), 0);
-    brouges[1] = boule(10, DIAM_BOULE, 1.f, Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2 + (ECART + DIAM_BOULE)), Vec2(0, 0), 0);
-    brouges[2] = boule(11, DIAM_BOULE, 1.f, Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2 + 2 * (ECART + DIAM_BOULE)), Vec2(0, 0), 0);
-    brouges[3] = boule(12, DIAM_BOULE, 1.f, Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2 - (ECART + DIAM_BOULE)), Vec2(0, 0), 0);
-    brouges[4] = boule(13, DIAM_BOULE, 1.f, Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2 - 2 * (ECART + DIAM_BOULE)), Vec2(0, 0), 0);
-    brouges[5] = boule(14, DIAM_BOULE, 1.f, Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART, DIM_TABLE_Y / 2 + DIAM_BOULE / 2 + ECART), Vec2(0, 0), 0);
-    brouges[6] = boule(15, DIAM_BOULE, 1.f, Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART, DIM_TABLE_Y / 2 - DIAM_BOULE / 2 - ECART), Vec2(0, 0), 0);
+    brouges[0] = boule(9, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2), Vec2(0, 0), 0);
+    brouges[1] = boule(10, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2 + (ECART + DIAM_BOULE)), Vec2(0, 0), 0);
+    brouges[2] = boule(11, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2 + 2 * (ECART + DIAM_BOULE)), Vec2(0, 0), 0);
+    brouges[3] = boule(12, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2 - (ECART + DIAM_BOULE)), Vec2(0, 0), 0);
+    brouges[4] = boule(13, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - 4 * DIAM_BOULE - QUAD_ECART, DIM_TABLE_Y / 2 - 2 * (ECART + DIAM_BOULE)), Vec2(0, 0), 0);
+    brouges[5] = boule(14, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART, DIM_TABLE_Y / 2 + DIAM_BOULE / 2 + ECART), Vec2(0, 0), 0);
+    brouges[6] = boule(15, DIAM_BOULE, PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 3 - TRIPLE_ECART, DIM_TABLE_Y / 2 - DIAM_BOULE / 2 - ECART), Vec2(0, 0), 0);
     BR = boulesRouges(brouges, 7);
 }
 
@@ -163,7 +164,7 @@ bool Jeu::UPDATEJEU() {
 
 }
 
-void Jeu::MAJpositionBoules() { //pour les frottements revenir ici et appliquer un scalaire à la vitesse des boules , indépendament de l'actu de position je pense
+void Jeu::MAJpositionBoules() { 
     BouleBlanche.positionBoule = BouleBlanche.positionBoule + (BouleBlanche.directionBoule * BouleBlanche.vitesseBoule);
     BouleBlanche.vitesseBoule = BouleBlanche.vitesseBoule * SCAL_F;
 
@@ -199,7 +200,6 @@ void Jeu::bouletombée(boulesJaunes &B) {
         }
     }
 }
-
 
 void Jeu::bouletombée(boulesRouges &B) {
     for (int i = 0 ; i < 6 ; i++){
@@ -251,45 +251,55 @@ bool Jeu::bouletombéeNR(boule &B) {
     return false;
 }
 
+Vec2 Jeu::TrouverVitessePara(const Vec2 VecDirection , const float vitesse ,  const Vec2 Norm) {
+    return (Norm * VecDirection.ProduitScalaire(Norm)).normalized() * vitesse; 
+}
+
+Vec2 Jeu::TrouverVitessePerp(const Vec2 VecDirection , const float vitesse , const Vec2 Norm) {
+    return (VecDirection - TrouverVitessePara(VecDirection , vitesse , Norm)).normalized() * vitesse; 
+}
 
 bool Jeu::checkCollision(const boule b1 , const boule b2) { //retourne true si il y a collision
     float distance = b1.positionBoule.Dist(b2.positionBoule);
     float sommeRad = b1.diam + b2.diam ;
     return distance < sommeRad / 2;
 }
+
 void Jeu::resultCollision(boule& b1, boule& b2) {
-    // Vecteur normalisé de la collision (de b1 vers b2)
-    Vec2 Norm = (b2.positionBoule - b1.positionBoule).normalized();
+    Vec2 VecDeCollision = b2.positionBoule - b1.positionBoule; 
+    Vec2 VDCnormalise = VecDeCollision.normalized();
 
-    // Vitesses vectorielles initiales
-    Vec2 v1 = b1.directionBoule * b1.vitesseBoule;
-    Vec2 v2 = b2.directionBoule * b2.vitesseBoule;
+    // Décomposer les vitesses en composantes parallèles et perpendiculaires
+    Vec2 vitesse1Para = TrouverVitessePara(b1.directionBoule, b1.vitesseBoule , VDCnormalise);
+    Vec2 vitesse1Perp = TrouverVitessePerp(b1.directionBoule, b1.vitesseBoule , VDCnormalise);
+    Vec2 vitesse2Para = TrouverVitessePara(b2.directionBoule, b2.vitesseBoule , VDCnormalise);
+    Vec2 vitesse2Perp = TrouverVitessePerp(b2.directionBoule, b2.vitesseBoule , VDCnormalise);
 
-    // Vecteur relatif et produit scalaire
-    Vec2 relativeVel = v1 - v2;
-    float dotProd = relativeVel.ProduitScalaire(Norm);
+    // Calculer les nouvelles magnitudes des vitesses 
+    float m1 = b1.masse;
+    float m2 = b2.masse;
+    float v1 = vitesse1Para.Normal(); // Magnitude de la composante parallèle de b1
+    float v2 = vitesse2Para.Normal(); // Magnitude de la composante parallèle de b2
+   
+    float v1_prime = (2 * m2 * v2) / (m1 + m2);
+    float v2_prime = (2 * m1 * v1) / (m1 + m2);
+    
+    // echanger les composantes parallèles et appliquer les nouvelles vitesses
+    b1.directionBoule = (vitesse2Para + vitesse1Perp).normalized();
+    b1.vitesseBoule = v1_prime;
+    b2.directionBoule = (vitesse1Para + vitesse2Perp).normalized();
+    b2.vitesseBoule = v2_prime;
 
-    // Collision seulement si les boules se rapprochent
-    if (dotProd >= 0) return;
+    //eviter les superpositions
+    float distance = b1.positionBoule.Dist(b2.positionBoule);
+    float sommeRad = b1.diam + b2.diam;
+    if (distance < sommeRad / 2) {
+        float overlap = (sommeRad / 2) - distance;
+        b1.positionBoule = b1.positionBoule - VDCnormalise * (overlap / 2);
+        b2.positionBoule = b2.positionBoule + VDCnormalise * (overlap / 2);
+    }
 
-    // Calcul de l'impulsion (avec masses)
-    float j = -(1.0f + 0.8f) * dotProd / (1.0f / b1.masse + 1.0f / b2.masse); // 0.8 = coefficient de restitution
-
-    // Mise à jour des vitesses
-    Vec2 new_v1 = v1 - Norm * (j / b1.masse); // Direction correcte
-    Vec2 new_v2 = v2 + Norm * (j / b2.masse); 
-
-    // Normalisation et mise à jour des directions/vitesses
-    float speed1 = new_v1.Normal(); // ||v||²
-    float speed2 = new_v2.Normal();
-
-    b1.directionBoule = (speed1 > 0) ? new_v1.normalized() : Vec2(0, 0);
-    b1.vitesseBoule = sqrt(speed1); // Racine carrée pour la norme réelle
-
-    b2.directionBoule = (speed2 > 0) ? new_v2.normalized() : Vec2(0, 0);
-    b2.vitesseBoule = sqrt(speed2);
 }
-
 
 void Jeu::GestionCollisionsBoules() {
     // Collisions entre la boule blanche et les boules jaunes

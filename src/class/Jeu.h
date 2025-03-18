@@ -36,6 +36,8 @@ class Jeu {
         void resultCollision(boule &b1 , boule &b2); //applique les nouvelles vitesses au boules après une collision
         void GestionCollisionsBoules();
         void GestionCollisionsBords();
+        Vec2 TrouverVitessePara(const Vec2 VecDirection , const float vitesse , const Vec2 Norm);
+        Vec2 TrouverVitessePerp(const Vec2 VecDirection , const float vitesse , const Vec2 Norm);
 
 };
 
