@@ -8,9 +8,5 @@
     Vec2(0,1) pour aller en bas , Vec2(0,-1) pour aller en haut.. Vec(x,y) avec (x,y) entre [-1 , 1].
     Donc voir MAJpositionBoules et resultCollisions
     
-pour compiler : 
-    make sur un terminal lié
-pour executer :
-    make testJeu (pour le tests regression de JEUINIT())
-    make projet (pour afficher le projet (necessaire d'avoir sdl2 d'installer))
+18/03 creation d'une 
     
