@@ -2,6 +2,6 @@
 
 14/03 le probleme principal est sur les formules physiques utilisées. 1. les vecteurs de direction ont un impact sur la force des boules et donc leurs vitesses se qui ne devrait pas etre le cas , les vecteurs de direction devrait etre des vecteurs comme : Vec(1,0) pour aller à droite , vec2(-1,0) pour aller à gauche Vec2(0,1) pour aller en bas , Vec2(0,-1) pour aller en haut.. Vec(x,y) avec (x,y) entre [-1 , 1]. Donc voir MAJpositionBoules et resultCollisions
 
-23/03 création de l'"espace" Jeutest.cpp et MainJeuTest.cpp pour faire des test d'affichage. j'y est fais des tests pour regler les problemes de physique (repasser boule -> vitesseBoule en tant que Vec2 et pas float et retirer boule -> directionBoule). Les modifications on après été apporté à l'espace de base (Jeu.cpp et main.cpp). + mise en commun des deux branches.
+23/03 création de l'"espace" Jeutest.cpp et MainJeuTest.cpp pour faire des test d'affichage. j'y est fais des tests pour regler les problemes de physique (repasser boule -> vitesseBoule en tant que Vec2 et pas float et retirer boule -> directionBoule). Les modifications on après été apporté à l'espace de base (Jeu.cpp et main.cpp). + mise en commun des deux branches. +suppression de la branch inutile.
 
 pour compiler : make sur un terminal lié pour executer : make testJeu (pour le tests regression de JEUINIT()) make projet (pour afficher le projet (necessaire d'avoir sdl2 d'installer))
