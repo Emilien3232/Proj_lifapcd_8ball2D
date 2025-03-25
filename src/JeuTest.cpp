@@ -39,8 +39,6 @@ void Jeu::INITJEU(){
 
 }
 
-
-
 bool Jeu::UPDATEJEU() {
     
     //update les positions des boules
@@ -135,14 +133,6 @@ bool Jeu::bouletombéeNR(boule &B) {
         }
     }
     return false;
-}
-
-Vec2 Jeu::TrouverVitessePara(const Vec2 VecDirection , const float vitesse ,  const Vec2 Norm) {
-    return (Norm * VecDirection.ProduitScalaire(Norm)).normalized() * vitesse; 
-}
-
-Vec2 Jeu::TrouverVitessePerp(const Vec2 VecDirection , const float vitesse , const Vec2 Norm) {
-    return (VecDirection - TrouverVitessePara(VecDirection , vitesse , Norm)).normalized() * vitesse; 
 }
 
 bool Jeu::checkCollision(const boule b1 , const boule b2) { //retourne true si il y a collision

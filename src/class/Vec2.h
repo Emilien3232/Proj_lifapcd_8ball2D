@@ -20,7 +20,7 @@ struct Vec2 {
 
     float Normal() const {return ProduitScalaire(Vec2(x,y));} // ||Vec2||² utiles pour les collisions
 
-    Vec2 normalized() const {
+    Vec2 normalized() const { // Vec2/||Vec2|| renvoie un vecteur dont les elements sont compris entre -1 et 1.
         float length = sqrt(x * x + y * y);
         if (length > 0) {
             return Vec2(x / length, y / length);
