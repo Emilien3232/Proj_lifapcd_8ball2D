@@ -1,4 +1,4 @@
-all : projet
+all : projet test
 
 test : src/mainTestJeu.cpp 
 	g++  src/mainTestJeu.cpp src/Jeu.cpp -o bin/mainTestJeu

@@ -11,7 +11,7 @@ const float ECART = 1.f; //petite distance entre chaque boules à l'initialisati
 const float DOUBLE_ECART = 2.f;
 const float TRIPLE_ECART = 3.f;
 const float QUAD_ECART = 4.f;
-const float SCAL_F = 0.95f; //constante de frottement
+const float SCAL_F = 0.96f; //constante de frottement
 const float SEUIL_VITESSE = 0.01f; 
 const float PB = 1.f;
 
