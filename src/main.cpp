@@ -7,7 +7,7 @@ const int SCREEN_HEIGHT = 746;  // Hauteur de la fenêtre
 const int DIM_TABLE_X = 1000; //longueur table
 const int DIM_TABLE_Y = 546; //largeur table
 
-// NOUVEAU : Variables pour gérer la ligne figée
+// Variables pour gérer la ligne figée
 bool isLineFrozen = false;
 Vec2 frozenLinePos(0, 0);
 
@@ -106,7 +106,7 @@ int main(int argc, char* argv[]) {
             if ((event.type == SDL_QUIT)||(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
                 quit = true;
             }
-            // NOUVEAU : Gestion du clic souris
+            // Gestion du clic souris
             else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
                 // Vérifier si la boule est à l'arrêt
                 Vec2 velocity = jeu.getBouleBlanche().vitesseBoule;
@@ -132,7 +132,7 @@ int main(int argc, char* argv[]) {
             quit = true;  // Fin du jeu
         }
 
-        // NOUVEAU : Vérifier si la boule est à l'arrêt pour réactiver la ligne dynamique
+        // Vérifier si la boule est à l'arrêt pour réactiver la ligne dynamique
         Vec2 velocity = jeu.getBouleBlanche().vitesseBoule;
         float speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
         if (speed >= 0.01f) { // SEUIL_VITESSE
@@ -147,7 +147,7 @@ int main(int argc, char* argv[]) {
         dessinerTable(renderer);
         dessinerTrous(renderer, jeu.getTDJ());
 
-        // NOUVEAU : Dessiner la trajectoire (figée ou dynamique)
+        // Dessiner la trajectoire (figée ou dynamique)
         if (isLineFrozen) {
             dessinerTrajectoire(renderer, jeu.getBouleBlanche(), frozenLinePos.x, frozenLinePos.y);
         } else {
