@@ -12,8 +12,8 @@ const float DOUBLE_ECART = 2.f;
 const float TRIPLE_ECART = 3.f;
 const float QUAD_ECART = 4.f;
 const float SCAL_F = 0.96f; //constante de frottement
-const float SEUIL_VITESSE = 0.01f; 
-const float PB = 1.f;
+const float SEUIL_VITESSE = 0.01f; // on utilisera cette constante pour immobiliser les boules quand leur vitesse est inferieur à cette const
+const float PB = 1.f; // poids des boules 
 
 void Jeu::INITJEU(){
     //on cherche à definir "TableDeJeu" donc premierement on initialise les trous avec un rayon de 2 * DIAM_BOULE et leurs position
@@ -30,7 +30,7 @@ void Jeu::INITJEU(){
     TDJ = TableDeJeu(DIM_TABLE_X , DIM_TABLE_Y , Vec2(0,0) , trousJeu);
 
     //on defini la boule blanche et la noir sur des positions precise qui serviront de repere pour les autres
-    BouleBlanche = boule(0 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(-50,0.1)); //le vecteur de direction ne doit pas impacté la force de frappe d'un boule mais jjuste sa direction (regler ce probleme)
+    BouleBlanche = boule(0 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(-50,1.5f)); //le vecteur de direction ne doit pas impacté la force de frappe d'un boule mais jjuste sa direction (regler ce probleme)
 
     BouleNoire = boule(1 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - 2.f , DIM_TABLE_Y / 2), Vec2(0,0) );
     
@@ -152,7 +152,7 @@ bool Jeu::UPDATEJEU() {
 
     bouletombéeBLCH(BouleBlanche);
 
-    //if(bouletombéNR(BouleNoire)) {return false;}   //marche mais je le met en commentaire pour pour pouvoir regarder le programme sans que sa s'arrete trop rapidement
+    if(bouletombéeNR(BouleNoire)) {return false;}   //marche mais je le met en commentaire pour pour pouvoir regarder le programme sans que sa s'arrete trop rapidement
 
     return true;
 
@@ -280,8 +280,8 @@ void Jeu::GestionCollisionsBoules() {
     // Collisions entre la boule blanche et les boules jaunes
     boule* bjaunes = BJ.getBjaunes();
     for (int i = 0; i < BJ.getnbBJ(); i++) {
-        if (checkCollision(BouleBlanche, BJ.getBjaunes()[i])) {
-            resultCollision(BouleBlanche, BJ.getBjaunes()[i]);
+        if (checkCollision(BouleBlanche, bjaunes[i])) {
+            resultCollision(BouleBlanche, bjaunes[i]);
         }
     }
 

@@ -19,13 +19,13 @@ class Jeu {
             TDJ(nTDJ) , BJ(nBJ) , BR(nBR) , BouleBlanche(nBouleBlanche) , BouleNoire(nBouleNoire) {}
 
         TableDeJeu& getTDJ() {return TDJ;}
-        boulesJaunes getBJ() {return BJ;}
-        boulesRouges getBR() {return BR;}
-        boule getBouleBlanche() {return BouleBlanche;}
-        boule getBouleNoire() {return BouleNoire;}
+        boulesJaunes& getBJ() {return BJ;}
+        boulesRouges& getBR() {return BR;}
+        boule& getBouleBlanche() {return BouleBlanche;}
+        boule& getBouleNoire() {return BouleNoire;}
         void INITJEU();
         void test_INITJEU(); //peut etre passé en bool
-        bool UPDATEJEU(); // à faire 
+        bool UPDATEJEU(); 
         void MAJpositionBoules(); //applique le vecteurs vitesse à la position des boules
         void bouletombée(boulesJaunes &B); //verifis et applique des modifications (reduire nombre boules) si les boules jaunes tombent un trou
         void bouletombée(boulesRouges &B); //pour les boules rouges

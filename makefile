@@ -12,6 +12,6 @@ projet : src/main.cpp
 	g++ src/main.cpp src/Jeu.cpp -o bin/mon_projet -lSDL2 -lSDL2main
 	./bin/mon_projet
 	
-
+	
 clean : 
 	rm -f bin/mainTestJeu bin/mon_projet bin/mon_testp

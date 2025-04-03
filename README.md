@@ -12,4 +12,5 @@ ce qui reste à faire :
 	gestion evenement dans sdl2 (boule tombé, fin de partie, cas particulier de regles (penalité,avantage) , nombre de point par joueur , ... )
 	gestion d'evenement utilisateur (alterné joueur 1 / joueur 2 , appliquer une vitesse à la boule blanche , appliquer une direction à la boule blanche , placer la boule blanche en cas d'avantage , ... )
 	affichage modifié (avec tableaux de score , affiche à qui est le tour , meilleur esthetique , affiché les direction de la boule blanche / systeme de visée , ... )
-	
+	sauvegarder
+	niveau de difficulté (multiples sdl)

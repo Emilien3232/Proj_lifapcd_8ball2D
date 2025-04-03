@@ -2,8 +2,8 @@
 #include <iostream>
 #include "class/Jeu.h"
 
-const int SCREEN_WIDTH = 1000;  // Largeur de la fenêtre
-const int SCREEN_HEIGHT = 546;  // Hauteur de la fenêtre
+const int SCREEN_WIDTH = 1500;  // Largeur de la fenêtre
+const int SCREEN_HEIGHT = 746;  // Hauteur de la fenêtre
 
 void dessinerTable(SDL_Renderer* renderer) {
     // Dessiner la table (un rectangle vert)

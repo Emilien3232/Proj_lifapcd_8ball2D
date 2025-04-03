@@ -2,14 +2,24 @@
 #include <iostream>
 #include "class/Jeu.h"
 
-const int SCREEN_WIDTH = 1000;  // Largeur de la fenêtre
-const int SCREEN_HEIGHT = 546;  // Hauteur de la fenêtre
+const int SCREEN_WIDTH = 1500;  // Largeur de la fenêtre
+const int SCREEN_HEIGHT = 746;  // Hauteur de la fenêtre
+const int DIM_TABLE_X = 1000; //longueur table
+const int DIM_TABLE_Y = 546; //largeur table
+
 
 void dessinerTable(SDL_Renderer* renderer) {
     // Dessiner la table (un rectangle vert)
     SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255);  // Couleur verte
-    SDL_Rect tableRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    SDL_Rect tableRect = {0, 0, DIM_TABLE_X, DIM_TABLE_Y};
     SDL_RenderFillRect(renderer, &tableRect);
+}
+
+void dessinerTrajectoire(SDL_Renderer* renderer , boule& b , int X , int Y){
+    SDL_SetRenderDrawColor(renderer , 255 , 255 , 255 , 150); // blanc legerement transparent
+    if(X<DIM_TABLE_X && Y<DIM_TABLE_Y){
+        SDL_RenderDrawLine(renderer , b.positionBoule.x , b.positionBoule.y , X , Y );
+    }
 }
 
 void dessinerBoule(SDL_Renderer* renderer, const boule& b, SDL_Color couleur) {
@@ -57,7 +67,7 @@ int main(int argc, char* argv[]) {
 
     // Création de la fenêtre
     SDL_Window* window = SDL_CreateWindow(
-        "Simulation de Billard",            // Titre de la fenêtre
+        "8ball_2D",            // Titre de la fenêtre
         SDL_WINDOWPOS_CENTERED,             // Position X
         SDL_WINDOWPOS_CENTERED,             // Position Y
         SCREEN_WIDTH,                       // Largeur
@@ -90,9 +100,22 @@ int main(int argc, char* argv[]) {
     while (!quit) {
         // Gestion des événements
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
+            if ((event.type == SDL_QUIT)||(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
                 quit = true;
             }
+            else if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_UP) {
+                jeu.getBouleBlanche().vitesseBoule = jeu.getBouleBlanche().vitesseBoule + Vec2(0,-5);
+            }
+            else if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_DOWN) {
+                jeu.getBouleBlanche().vitesseBoule = jeu.getBouleBlanche().vitesseBoule + Vec2(0,5);
+            }
+            else if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_LEFT) {
+                jeu.getBouleBlanche().vitesseBoule = jeu.getBouleBlanche().vitesseBoule + Vec2(-5,0);
+            }
+            else if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RIGHT) {
+                jeu.getBouleBlanche().vitesseBoule = jeu.getBouleBlanche().vitesseBoule + Vec2(5,0);
+            }
+
         }
 
         // Mise à jour du jeu
@@ -101,12 +124,18 @@ int main(int argc, char* argv[]) {
         }
 
         // Effacer l'écran
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // Fond noir
+        SDL_SetRenderDrawColor(renderer, 105, 0, 0, 255);  // couleur de fond 
         SDL_RenderClear(renderer);
+
+
+        int mouseX, mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+
 
         // Dessiner les éléments du jeu (à implémenter)
         dessinerTable(renderer);
         dessinerTrous(renderer, jeu.getTDJ());
+        dessinerTrajectoire(renderer , jeu.getBouleBlanche() , mouseX , mouseY);
 
 
         // Dessiner les boules
