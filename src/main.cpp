@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
                     Vec2 ballPos = jeu.getBouleBlanche().positionBoule;
                     Vec2 direction = frozenLinePos - ballPos;
                     direction = direction.normalized();
-                    float vitesse = 50.0f; // Ajuster selon le besoin
+                    float vitesse = 25.0f; // Ajuster selon le besoin
                     jeu.getBouleBlanche().vitesseBoule = direction * vitesse;
                 }
             }
