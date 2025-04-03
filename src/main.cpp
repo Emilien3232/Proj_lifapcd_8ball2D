@@ -7,6 +7,9 @@ const int SCREEN_HEIGHT = 746;  // Hauteur de la fenêtre
 const int DIM_TABLE_X = 1000; //longueur table
 const int DIM_TABLE_Y = 546; //largeur table
 
+// NOUVEAU : Variables pour gérer la ligne figée
+bool isLineFrozen = false;
+Vec2 frozenLinePos(0, 0);
 
 void dessinerTable(SDL_Renderer* renderer) {
     // Dessiner la table (un rectangle vert)
@@ -103,19 +106,25 @@ int main(int argc, char* argv[]) {
             if ((event.type == SDL_QUIT)||(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
                 quit = true;
             }
-            else if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_UP) {
-                jeu.getBouleBlanche().vitesseBoule = jeu.getBouleBlanche().vitesseBoule + Vec2(0,-5);
+            // NOUVEAU : Gestion du clic souris
+            else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+                // Vérifier si la boule est à l'arrêt
+                Vec2 velocity = jeu.getBouleBlanche().vitesseBoule;
+                float speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+                if (speed < 0.01f) { // SEUIL_VITESSE
+                    int mouseX, mouseY;
+                    SDL_GetMouseState(&mouseX, &mouseY);
+                    frozenLinePos = Vec2(mouseX, mouseY);
+                    isLineFrozen = true;
+                    
+                    // Calculer la direction et appliquer la vitesse
+                    Vec2 ballPos = jeu.getBouleBlanche().positionBoule;
+                    Vec2 direction = frozenLinePos - ballPos;
+                    direction = direction.normalized();
+                    float vitesse = 50.0f; // Ajuster selon le besoin
+                    jeu.getBouleBlanche().vitesseBoule = direction * vitesse;
+                }
             }
-            else if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_DOWN) {
-                jeu.getBouleBlanche().vitesseBoule = jeu.getBouleBlanche().vitesseBoule + Vec2(0,5);
-            }
-            else if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_LEFT) {
-                jeu.getBouleBlanche().vitesseBoule = jeu.getBouleBlanche().vitesseBoule + Vec2(-5,0);
-            }
-            else if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RIGHT) {
-                jeu.getBouleBlanche().vitesseBoule = jeu.getBouleBlanche().vitesseBoule + Vec2(5,0);
-            }
-
         }
 
         // Mise à jour du jeu
@@ -123,20 +132,29 @@ int main(int argc, char* argv[]) {
             quit = true;  // Fin du jeu
         }
 
+        // NOUVEAU : Vérifier si la boule est à l'arrêt pour réactiver la ligne dynamique
+        Vec2 velocity = jeu.getBouleBlanche().vitesseBoule;
+        float speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+        if (speed >= 0.01f) { // SEUIL_VITESSE
+            isLineFrozen = false;
+        }
+
         // Effacer l'écran
         SDL_SetRenderDrawColor(renderer, 105, 0, 0, 255);  // couleur de fond 
         SDL_RenderClear(renderer);
 
-
-        int mouseX, mouseY;
-        SDL_GetMouseState(&mouseX, &mouseY);
-
-
-        // Dessiner les éléments du jeu (à implémenter)
+        // Dessiner les éléments du jeu
         dessinerTable(renderer);
         dessinerTrous(renderer, jeu.getTDJ());
-        dessinerTrajectoire(renderer , jeu.getBouleBlanche() , mouseX , mouseY);
 
+        // NOUVEAU : Dessiner la trajectoire (figée ou dynamique)
+        if (isLineFrozen) {
+            dessinerTrajectoire(renderer, jeu.getBouleBlanche(), frozenLinePos.x, frozenLinePos.y);
+        } else {
+            int mouseX, mouseY;
+            SDL_GetMouseState(&mouseX, &mouseY);
+            dessinerTrajectoire(renderer, jeu.getBouleBlanche(), mouseX, mouseY);
+        }
 
         // Dessiner les boules
         SDL_Color couleurJaune = {255, 255, 0, 255};  // Jaune
