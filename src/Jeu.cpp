@@ -30,7 +30,7 @@ void Jeu::INITJEU(){
     TDJ = TableDeJeu(DIM_TABLE_X , DIM_TABLE_Y , Vec2(0,0) , trousJeu);
 
     //on defini la boule blanche et la noir sur des positions precise qui serviront de repere pour les autres
-    BouleBlanche = boule(0 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(-50,1.5f)); //le vecteur de direction ne doit pas impacté la force de frappe d'un boule mais jjuste sa direction (regler ce probleme)
+    BouleBlanche = boule(0 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) , Vec2(0,0)); //le vecteur de direction ne doit pas impacté la force de frappe d'un boule mais jjuste sa direction (regler ce probleme)
 
     BouleNoire = boule(1 , DIAM_BOULE , PB , Vec2(DIM_TABLE_X / 4 - DIAM_BOULE * 2 - 2.f , DIM_TABLE_Y / 2), Vec2(0,0) );
     
@@ -181,7 +181,7 @@ void Jeu::MAJpositionBoules() {
 
 void Jeu::bouletombée(boulesJaunes &B) {
     for (int i = 0 ; i < 6 ; i++){
-        if(B.getBjaunes()[i].positionBoule.Dist(TDJ.gettrous()[i].posTrou) < DIAM_BOULE) { //si la boule B est dans un trou 
+        if(B.getBjaunes()[i].positionBoule.Dist(TDJ.gettrous()[i].posTrou) <  2 * DIAM_BOULE) { //si la boule B est dans un trou 
             B.setnbBJ(B.getnbBJ() - 1);
             std::cout<<"la boule "<<B.getBjaunes()[i].IDnombre<<" est tombée"<<std::endl;
             B.getBjaunes()[i].positionBoule =Vec2(DIM_TABLE_X /2,DIM_TABLE_Y /2); //faire disparaitre la boule (je la met dans un coin )
@@ -197,7 +197,7 @@ void Jeu::bouletombée(boulesJaunes &B) {
 
 void Jeu::bouletombée(boulesRouges &B) {
     for (int i = 0 ; i < 6 ; i++){
-        if(B.getBrouges()[i].positionBoule.Dist(TDJ.gettrous()[i].posTrou) < DIAM_BOULE) { //si la boule B est dans un trou //j'utilise la meme variable pour les trous c'est une erreur 
+        if(B.getBrouges()[i].positionBoule.Dist(TDJ.gettrous()[i].posTrou) < 2 * DIAM_BOULE) { //si la boule B est dans un trou //j'utilise la meme variable pour les trous c'est une erreur 
             B.setnbBR(B.getnbBR() - 1); //pose probleme car n'empeche pas que la boucle reverifie la situation d'une boule deja tombé , elle exclu juste la derniere boule dans la liste
             std::cout<<"la boule "<<B.getBrouges()[i].IDnombre<<" est tombée"<<std::endl;
             B.getBrouges()[i].positionBoule = Vec2(DIM_TABLE_X /2,DIM_TABLE_Y /2);//faire disparaitre la boule (je la met dans un coin )
@@ -226,7 +226,7 @@ void Jeu::bouletombée(boule &B) {
 
 void Jeu::bouletombéeBLCH(boule &B) {
     for (int i = 0 ; i < 6 ; i++){
-        if(B.positionBoule.Dist(TDJ.gettrous()[i].posTrou) < DIAM_BOULE) { //si la boule B est dans un trou 
+        if(B.positionBoule.Dist(TDJ.gettrous()[i].posTrou) < 2* DIAM_BOULE) { //si la boule B est dans un trou 
             std::cout<<"la boule blanche est tombée !!"<<std::endl;
             B.positionBoule = Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) ; //si la boule blanche je la remet à sa position de départ
             B.vitesseBoule = Vec2(0,0);
@@ -236,7 +236,7 @@ void Jeu::bouletombéeBLCH(boule &B) {
 
 bool Jeu::bouletombéeNR(boule &B) {
     for (int i = 0 ; i < 6 ; i++){
-        if(B.positionBoule.Dist(TDJ.gettrous()[i].posTrou) < DIAM_BOULE) { //si la boule B est dans un trou 
+        if(B.positionBoule.Dist(TDJ.gettrous()[i].posTrou) < 2 * DIAM_BOULE) { //si la boule B est dans un trou 
             std::cout<<"la boule noire est tombée !!"<<std::endl;
             return true; //si la boule noire tombe je retourne true
         }

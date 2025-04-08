@@ -6,6 +6,7 @@ const int SCREEN_WIDTH = 1500;  // Largeur de la fenêtre
 const int SCREEN_HEIGHT = 746;  // Hauteur de la fenêtre
 const int DIM_TABLE_X = 1000; //longueur table
 const int DIM_TABLE_Y = 546; //largeur table
+const float SEUIL_VITESSE = 0.01f;  // vitesse minimale avant evenement
 
 // Variables pour gérer la ligne figée
 bool isLineFrozen = false;
@@ -61,6 +62,20 @@ void dessinerTrous(SDL_Renderer* renderer, TableDeJeu& table) {
     }
 }
 
+void afficherVitesse (SDL_Renderer* renderer , float V){ //plus complexe mais c'est un debut
+    SDL_Color blanc = {255,255,255,255};
+    std::string texte = "Vitesse : " + std::to_string((int)V);
+}
+
+
+void JaugeVitesse (SDL_Renderer* renderer , float V) {
+    SDL_SetRenderDrawColor(renderer, 255, 255 , 0, 255);  
+    SDL_Rect jaugeRect = {DIM_TABLE_X +100 , DIM_TABLE_Y , 10 , (int) ((-1) * 5 - V * (DIM_TABLE_Y / 45)) };
+    SDL_RenderFillRect(renderer, &jaugeRect);
+}
+
+
+
 int main(int argc, char* argv[]) {
     // Initialisation de SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -101,17 +116,26 @@ int main(int argc, char* argv[]) {
     bool quit = false;
     SDL_Event event;
     while (!quit) {
+
+        // declartion variable "globale"
+
+        float VB ;
+
+
         // Gestion des événements
-        while (SDL_PollEvent(&event)) {
+
+
+        while (SDL_PollEvent(&event)) { // gere les evenement de sortie
             if ((event.type == SDL_QUIT)||(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
                 quit = true;
             }
-            // Gestion du clic souris
-            else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+            
+
+            else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) { //gere la trajectoire et actualise la position de la boule blanche
                 // Vérifier si la boule est à l'arrêt
                 Vec2 velocity = jeu.getBouleBlanche().vitesseBoule;
                 float speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-                if (speed < 0.01f) { // SEUIL_VITESSE
+                if (speed < SEUIL_VITESSE) { // SEUIL_VITESSE
                     int mouseX, mouseY;
                     SDL_GetMouseState(&mouseX, &mouseY);
                     frozenLinePos = Vec2(mouseX, mouseY);
@@ -121,10 +145,26 @@ int main(int argc, char* argv[]) {
                     Vec2 ballPos = jeu.getBouleBlanche().positionBoule;
                     Vec2 direction = frozenLinePos - ballPos;
                     direction = direction.normalized();
-                    float vitesse = 25.0f; // Ajuster selon le besoin
-                    jeu.getBouleBlanche().vitesseBoule = direction * vitesse;
+
+
+                    //float vitesse = 25.0f; // Ajuster selon le besoin
+
+                    jeu.getBouleBlanche().vitesseBoule = direction * VB;
                 }
             }
+
+            else if(event.type == SDL_KEYDOWN){
+                if ( event.key.keysym.sym == SDLK_UP) { //gere la vitesse appliquer à la boule blanche (via var glob "VB")
+                    VB += 2.f;
+                    std::cout<<"vitesse : "<<VB<<std::endl;
+                }
+                if (event.key.keysym.sym == SDLK_DOWN) { //gere la vitesse appliquer à la boule blanche (via var glob "VB")
+                    VB -= 2.f;
+                    std::cout<<"vitesse : "<<VB<<std::endl;
+                }
+                VB = std::max(5.f , std::min(VB , 45.f)); // VB appartient à [5;45]
+            }
+
         }
 
         // Mise à jour du jeu
@@ -155,6 +195,9 @@ int main(int argc, char* argv[]) {
             SDL_GetMouseState(&mouseX, &mouseY);
             dessinerTrajectoire(renderer, jeu.getBouleBlanche(), mouseX, mouseY);
         }
+
+        // Dessiner la jauge
+        JaugeVitesse(renderer , VB);
 
         // Dessiner les boules
         SDL_Color couleurJaune = {255, 255, 0, 255};  // Jaune
