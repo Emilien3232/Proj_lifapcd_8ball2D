@@ -226,9 +226,9 @@ void Jeu::bouletombée(boule &B) {
 
 void Jeu::bouletombéeBLCH(boule &B) {
     for (int i = 0 ; i < 6 ; i++){
-        if(B.positionBoule.Dist(TDJ.gettrous()[i].posTrou) < DIAM_BOULE) { //si la boule B est dans un trou 
+        if(B.positionBoule.Dist(TDJ.gettrous()[i].posTrou) < DIAM_BOULE) {
             std::cout<<"la boule blanche est tombée !!"<<std::endl;
-            B.positionBoule = Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) ; //si la boule blanche je la remet à sa position de départ
+            B.diam = 0.0f; // La boule devient invisible
             B.vitesseBoule = Vec2(0,0);
         }
     }
