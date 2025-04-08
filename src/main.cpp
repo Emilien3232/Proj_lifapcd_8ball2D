@@ -8,9 +8,10 @@ const int SCREEN_HEIGHT = 746;
 const int DIM_TABLE_X = 1000;
 const int DIM_TABLE_Y = 546;
 
-// Variables pour gérer la ligne figée
+// Variables globales
 bool isLineFrozen = false;
 Vec2 frozenLinePos(0, 0);
+float VB = 25.f;
 
 void dessinerTable(SDL_Renderer* renderer) {
     SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255);
@@ -59,6 +60,12 @@ void dessinerTrous(SDL_Renderer* renderer, TableDeJeu& table) {
     }
 }
 
+void JaugeVitesse (SDL_Renderer* renderer , float V) {
+    SDL_SetRenderDrawColor(renderer, 255, 255 , 0, 255);  
+    SDL_Rect jaugeRect = {DIM_TABLE_X +100 , DIM_TABLE_Y , 10 , (int) ((-1) * 5 - V * (DIM_TABLE_Y / 47)) };
+    SDL_RenderFillRect(renderer, &jaugeRect);
+}
+
 int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "Erreur SDL: " << SDL_GetError() << std::endl;
@@ -85,33 +92,32 @@ int main(int argc, char* argv[]) {
         SDL_Quit();
         return 1;
     }
-
+    
+    //initialisation jeu
     Jeu jeu;
     jeu.INITJEU();
 
+    //debut boucle principale
     bool quit = false;
     SDL_Event event;
     while (!quit) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT ||
-               (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
+            if ((event.type == SDL_QUIT) || (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)) {
                 quit = true;
             }
             else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
-                if (jeu.getBouleBlanche().diam == 0.0f) {
+                if (jeu.getBouleBlanche().diam == 0.0f) { //si la boule blanche est tombée 
                     int mouseX, mouseY;
                     SDL_GetMouseState(&mouseX, &mouseY);
                     
-                    if (mouseX >= 0 && mouseX <= DIM_TABLE_X &&
-                        mouseY >= 0 && mouseY <= DIM_TABLE_Y) {
-                        
+                    if (mouseX >= 0 && mouseX <= DIM_TABLE_X && mouseY >= 0 && mouseY <= DIM_TABLE_Y) { //si le curseur est dans la fenetre
                         jeu.getBouleBlanche().positionBoule = Vec2(mouseX, mouseY);
                         jeu.getBouleBlanche().diam = DIAM_BOULE;
                         jeu.getBouleBlanche().vitesseBoule = Vec2(0, 0);
                         std::cout << "la boule blanche est replacée !!" << std::endl;
                     }
                 }
-                else {
+                else { // si la boule blanche n'est pas tombée
                     Vec2 velocity = jeu.getBouleBlanche().vitesseBoule;
                     float speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
                     if (speed < 0.01f) {
@@ -123,14 +129,25 @@ int main(int argc, char* argv[]) {
                         Vec2 ballPos = jeu.getBouleBlanche().positionBoule;
                         Vec2 direction = frozenLinePos - ballPos;
                         direction = direction.normalized();
-                        float vitesse = 50.0f;
-                        jeu.getBouleBlanche().vitesseBoule = direction * vitesse;
+                        
+                        jeu.getBouleBlanche().vitesseBoule = direction * VB;
                     }
                 }
             }
+            else if(event.type == SDL_KEYDOWN){ 
+                if ( event.key.keysym.sym == SDLK_UP) { //gere la vitesse appliquer à la boule blanche (via var glob "VB")
+                    VB += 2.f;
+                    std::cout<<"vitesse : "<<VB<<std::endl;
+                }
+                if (event.key.keysym.sym == SDLK_DOWN) { //gere la vitesse appliquer à la boule blanche (via var glob "VB")
+                    VB -= 2.f;
+                    std::cout<<"vitesse : "<<VB<<std::endl;
+                }
+                VB = std::max(5.f , std::min(VB , 45.f)); // VB appartient à [5;45]
+            }
         }
 
-        if (!jeu.UPDATEJEU()) {
+        if (!jeu.UPDATEJEU()) { // si update retourne 0 on arrete le jeu
             quit = true;
         }
 
@@ -143,9 +160,15 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawColor(renderer, 105, 0, 0, 255);
         SDL_RenderClear(renderer);
 
+
+
+
+
+
+        //affichage
         dessinerTable(renderer);
         dessinerTrous(renderer, jeu.getTDJ());
-
+        JaugeVitesse(renderer , VB);
         if (jeu.getBouleBlanche().diam > 0.0f) {
             if (isLineFrozen) {
                 dessinerTrajectoire(renderer, jeu.getBouleBlanche(), frozenLinePos.x, frozenLinePos.y);
@@ -156,14 +179,19 @@ int main(int argc, char* argv[]) {
             }
         }
 
+
+        //affichage des boules
         SDL_Color couleurJaune = {255, 255, 0, 255};
         SDL_Color couleurRouge = {255, 0, 0, 255};
         SDL_Color couleurBlanche = {255, 255, 255, 255};
+        SDL_Color couleurBlancheBIS = {255, 255, 255, 50};
         SDL_Color couleurNoire = {0, 0, 0, 255};
 
-        if (jeu.getBouleBlanche().diam > 0.0f) {
-            dessinerBoule(renderer, jeu.getBouleBlanche(), couleurBlanche);
+        if (jeu.getBouleBlanche().diam == 0.0f) {
+            dessinerBoule(renderer, jeu.getBouleBlanche(), couleurBlancheBIS);
         }
+        else {dessinerBoule(renderer, jeu.getBouleBlanche(), couleurBlanche);}
+
         dessinerBoule(renderer, jeu.getBouleNoire(), couleurNoire);
 
         boule* bjaunes = jeu.getBJ().getBjaunes();
@@ -178,6 +206,7 @@ int main(int argc, char* argv[]) {
 
         SDL_RenderPresent(renderer);
         SDL_Delay(16);
+        //fin affichage
     }
 
     SDL_DestroyRenderer(renderer);
