@@ -184,6 +184,7 @@ void Jeu::bouletombée(boulesJaunes &B) {
         if(B.getBjaunes()[i].positionBoule.Dist(TDJ.gettrous()[i].posTrou) <  2 * DIAM_BOULE) { //si la boule B est dans un trou 
             B.setnbBJ(B.getnbBJ() - 1);
             std::cout<<"la boule "<<B.getBjaunes()[i].IDnombre<<" est tombée"<<std::endl;
+            B.getBjaunes()[i].est_tombé = true;
             B.getBjaunes()[i].positionBoule =Vec2(DIM_TABLE_X /2,DIM_TABLE_Y /2); //faire disparaitre la boule (je la met dans un coin )
             B.getBjaunes()[i].diam = 0.f;  //et mets son rayon si petit qu'elle ne s'affcihcera pas (pas sur)
         }
@@ -200,6 +201,7 @@ void Jeu::bouletombée(boulesRouges &B) {
         if(B.getBrouges()[i].positionBoule.Dist(TDJ.gettrous()[i].posTrou) < 2 * DIAM_BOULE) { //si la boule B est dans un trou //j'utilise la meme variable pour les trous c'est une erreur 
             B.setnbBR(B.getnbBR() - 1); //pose probleme car n'empeche pas que la boucle reverifie la situation d'une boule deja tombé , elle exclu juste la derniere boule dans la liste
             std::cout<<"la boule "<<B.getBrouges()[i].IDnombre<<" est tombée"<<std::endl;
+            B.getBrouges()[i].est_tombé = true;
             B.getBrouges()[i].positionBoule = Vec2(DIM_TABLE_X /2,DIM_TABLE_Y /2);//faire disparaitre la boule (je la met dans un coin )
             B.getBrouges()[i].diam = 0.f;  //et mets son rayon si petit qu'elle ne s'affcihcera pas 
         }
@@ -228,6 +230,7 @@ void Jeu::bouletombéeBLCH(boule &B) {
     for (int i = 0 ; i < 6 ; i++){
         if(B.positionBoule.Dist(TDJ.gettrous()[i].posTrou) < 2* DIAM_BOULE) { //si la boule B est dans un trou 
             std::cout<<"la boule blanche est tombée !!"<<std::endl;
+            B.est_tombé = true;
             B.positionBoule = Vec2(DIM_TABLE_X * 3 / 4 , DIM_TABLE_Y / 2) ; //si la boule blanche je la remet à sa position de départ
             B.vitesseBoule = Vec2(0,0);
         }
@@ -238,6 +241,7 @@ bool Jeu::bouletombéeNR(boule &B) {
     for (int i = 0 ; i < 6 ; i++){
         if(B.positionBoule.Dist(TDJ.gettrous()[i].posTrou) < 2 * DIAM_BOULE) { //si la boule B est dans un trou 
             std::cout<<"la boule noire est tombée !!"<<std::endl;
+            B.est_tombé = true;
             return true; //si la boule noire tombe je retourne true
         }
     }
