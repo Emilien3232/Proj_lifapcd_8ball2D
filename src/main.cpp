@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "class/Jeu.h"
+#include "class/Joueur.h"
 
 const float DIAM_BOULE = 20.5; //diametre des boules
 const int SCREEN_WIDTH = 1500;
@@ -11,7 +12,8 @@ const int DIM_TABLE_Y = 546;
 // Variables globales
 bool isLineFrozen = false;
 Vec2 frozenLinePos(0, 0);
-float VB = 25.f;
+float VB = 3.f;
+SDL_Color CLR ={0,0,0,255};
 
 void dessinerTable(SDL_Renderer* renderer) {
     SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255);
@@ -66,6 +68,18 @@ void JaugeVitesse (SDL_Renderer* renderer , float V) {
     SDL_RenderFillRect(renderer, &jaugeRect);
 }
 
+void dessinerRect(SDL_Renderer* renderer ,SDL_Color CLR){
+    SDL_SetRenderDrawColor(renderer , CLR.r , CLR.g , CLR.b , CLR.a);
+    SDL_Rect Rect = {DIM_TABLE_X / 2 , DIM_TABLE_Y + 70 , 20 , 20};
+    SDL_RenderFillRect(renderer , &Rect);
+}
+
+
+bool chgmt_joueur(Jeu jeu , Joueur& JoueurActuel){
+    if(jeu.getBouleBlanche().est_tombé){return true;}
+    return false;
+}
+
 int main(int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "Erreur SDL: " << SDL_GetError() << std::endl;
@@ -93,9 +107,12 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    //initialisation jeu
+    // Initialisation du jeu & des joueurs
     Jeu jeu;
     jeu.INITJEU();
+
+    Joueur Numero1 = Joueur(0,1,jeu.getBR().getBrouges(),0,true);
+    Joueur Numero2 = Joueur(1,0,jeu.getBJ().getBjaunes(),0,false);
 
     //debut boucle principale
     bool quit = false;
@@ -115,6 +132,7 @@ int main(int argc, char* argv[]) {
                         jeu.getBouleBlanche().diam = DIAM_BOULE;
                         jeu.getBouleBlanche().vitesseBoule = Vec2(0, 0);
                         std::cout << "la boule blanche est replacée !!" << std::endl;
+                        jeu.getBouleBlanche().est_tombé = false; // remettre la boule blanche à l'état initial
                     }
                 }
                 else { // si la boule blanche n'est pas tombée
@@ -125,6 +143,7 @@ int main(int argc, char* argv[]) {
                         SDL_GetMouseState(&mouseX, &mouseY);
                         frozenLinePos = Vec2(mouseX, mouseY);
                         isLineFrozen = true;
+
                         
                         Vec2 ballPos = jeu.getBouleBlanche().positionBoule;
                         Vec2 direction = frozenLinePos - ballPos;
@@ -145,7 +164,24 @@ int main(int argc, char* argv[]) {
                 }
                 VB = std::max(5.f , std::min(VB , 45.f)); // VB appartient à [5;45]
             }
-        }
+
+
+        
+
+            else if (chgmt_joueur(jeu, (Numero1.getActif() ? Numero1 : Numero2))) {
+                // Changement de joueur
+                if (Numero1.getActif()) {
+                    Numero1.setActif(false);
+                    Numero2.setActif(true);
+                    CLR = {255, 255, 0, 255};
+                }
+                else {
+                    Numero1.setActif(true);
+                    Numero2.setActif(false);
+                    CLR = {255, 0, 0, 255};
+                }
+            }
+        } // fin "while (SDL_PollEvent(&event)) { "
 
         if (!jeu.UPDATEJEU()) { // si update retourne 0 on arrete le jeu
             quit = true;
@@ -160,15 +196,11 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawColor(renderer, 105, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-
-
-
-
-
         //affichage
         dessinerTable(renderer);
         dessinerTrous(renderer, jeu.getTDJ());
         JaugeVitesse(renderer , VB);
+        dessinerRect(renderer, CLR);
         if (jeu.getBouleBlanche().diam > 0.0f) {
             if (isLineFrozen) {
                 dessinerTrajectoire(renderer, jeu.getBouleBlanche(), frozenLinePos.x, frozenLinePos.y);
@@ -207,7 +239,7 @@ int main(int argc, char* argv[]) {
         SDL_RenderPresent(renderer);
         SDL_Delay(16);
         //fin affichage
-    }
+    }//fin "while (!quit) {"
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
